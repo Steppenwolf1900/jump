@@ -1,36 +1,37 @@
 //logs.js
-const util = require('../../utils/util.js')
+const util = require('../../utils/util.js');
+const { db, regeneratorRuntime } = getApp().globalData;
 
 Page({
   data: {
-    name:'name',
-    pwd:'pwd',
-    login_name:'',
-    login_pwd:'',
+    name:'',
+    pwd:'',
     is_logined:false
   },
-  login: function () {
-    if (this.data.name !== this.data.login_name || this.data.pwd !== this.data.login_pwd){
+  login: async function () {
+    let data = (await db.collection('users').where({ name:this.data.name,pwd:this.data.pwd }).get()).data;
+
+    if (data.length){
       this.setData({
-        login_pwd: ''
+        is_logined: true
       });
+      this.dialog = this.selectComponent("#dialog_success");
       this.dialog.showDialog();
     } else {
       this.setData({
-        is_logined:true
+        login_pwd: ''
       });
-      this.dialog = this.selectComponent("#dialog_success");
       this.dialog.showDialog();
     }
   },
   bindPwdInput(e) {
     this.setData({
-      login_pwd: e.detail.value
+      pwd: e.detail.value
     })
   },
   bindNameInput(e) {
     this.setData({
-      login_name: e.detail.value
+      name: e.detail.value
     })
   },
   /**
@@ -52,5 +53,10 @@ Page({
   _confirmEvent() {
     console.log('你点击了确定');
     this.dialog.hideDialog();
+    if (this.data.is_logined){
+      wx.navigateTo({
+        url: '../admin/home/home'
+      })
+    }
   }
 })

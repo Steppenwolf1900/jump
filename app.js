@@ -6,6 +6,18 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+    } else {
+      wx.cloud.init({
+        traceUser: true,
+      })
+    }
+
+    this.globalData.db = wx.cloud.database();
+    this.globalData.regeneratorRuntime =
+    require('./lib/miniprogram_npm/@babel/runtime/miniprogram_npm/regenerator-runtime/index.js');
+
     // 登录
     wx.login({
       success: res => {
@@ -34,6 +46,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    db:null,
+    regeneratorRuntime:null
   }
 })

@@ -3,7 +3,7 @@
     <input placeholder="用户名" bindinput="bindNameInput" auto-focus />
   </view>
   <view class="section">
-    <input placeholder="密码" bindinput="bindPwdInput" focus="{{focus}}" />
+    <input placeholder="密码" bindinput="bindPwdInput" password="true" focus="{{focus}}" />
   </view>
   <button bindtap="login">登录</button>
   <dialog id="dialog" title="温馨提示" 
